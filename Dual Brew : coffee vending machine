@@ -127,7 +127,7 @@ endmodule
 
 // Testbench code
 
-`timescale 1ns / 1ps
+	`timescale 1ns / 1ps
 module coffee_vending_machine_tb;
 
 	// Inputs
@@ -141,7 +141,7 @@ module coffee_vending_machine_tb;
 	wire coffee1;
 	wire [3:0] money;
 
-	// Instantiate the Unit Under Test (UUT)
+	// Instantiate the Design Block
 	coffee_vending_machine uut (
 		.clk(clk), 
 		.rst(rst), 
@@ -162,10 +162,10 @@ module coffee_vending_machine_tb;
 		// Test Case 1: 5 + 5 + 5 = 15
 in = 5'b00101; // Input 5
 #19 in = 5'b00101; // Input another 5 after 19 time units
-#10 in = 5'b00101;
-select = 0;  // Input another 5 after 10 time units
+#10 in = 5'b00101; // Input another 5 after 10 time units
+select = 0;  // select is to be set as zero
 #10;
-if ((coffee0 == 1'b1)||(coffee1 ==1'b1))
+if ((coffee0 == 1'b1)||(coffee1 == 1'b1))
     $display("got coffee");
 else
     $display("no coffee");
@@ -177,10 +177,10 @@ else
 	
 	// Test Case 2: 5 + 10 = 15
 in = 5'b00101; // Input 5
-#10 in = 5'b01010;
-select = 1;  // Input 10 after 10 time units
+#10 in = 5'b01010; // Input 10 after 10 time units
+select = 1; // select is to be set as one
 #10;
-if ((coffee0 == 1'b1)||(coffee1 ==1'b1))
+if ((coffee0 == 1'b1)||(coffee1 == 1'b1))
     $display("got coffee");
 else
     $display("no coffee");
@@ -192,10 +192,10 @@ else
 	 
 // Test Case 3: 10 + 5 = 15
 in = 5'b01010; // Input 10
-#10 in = 5'b00101;
-select = 0;  // Input 5 after 10 time units
+#10 in = 5'b00101; // Input 5 after 10 time units
+select = 0;  // select is to be set as zero
 #10;
-if ((coffee0 == 1'b1)||(coffee1 ==1'b1))
+if ((coffee0 == 1'b1)||(coffee1 == 1'b1))
     $display("got coffee");
 else
     $display("no coffee");
@@ -206,10 +206,10 @@ else
 	 	 
 // Test Case 4: 10 + 10 = 20 and change of 5
 in = 5'b01010; // Input 10
-#19 in = 5'b01010;
-select = 1;  // Input another 10 after 19 time units
+#19 in = 5'b01010;  // Input another 10 after 19 time units
+select = 1;  // select is to be set as one
 #10;
-if ((coffee0 == 1'b1)||(coffee1 ==1'b1))
+if ((coffee0 == 1'b1)||(coffee1 == 1'b1))
     $display("got coffee with a change of %d", money);
 else
     $display("no coffee");
@@ -220,10 +220,10 @@ else
 	 
 	 
 	 // Test Case 5: 20 = 20 and change of 5
-in = 5'b10100;
-select = 1;  // Input 20
+in = 5'b10100; // Input 20
+select = 1;  // select is to be set as one
 #10;
-if ((coffee0 == 1'b1)||(coffee1 ==1'b1))
+if ((coffee0 == 1'b1)||(coffee1 == 1'b1))
     $display("got coffee with a change of %d", money);
 else
     $display("no coffee");
@@ -233,6 +233,8 @@ end
 always #5 clk = ~clk;	 
       
 endmodule
+	
+
 
 
 
