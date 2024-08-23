@@ -1,0 +1,99 @@
+// half adder module        // DESIGN CODE
+module half_adder(
+    input x,
+    input y,
+    output sum,
+    output carry
+    );
+    assign sum = x ^ y;
+    assign carry = x & y;
+endmodule
+
+// 2bit vedic multiplier module
+module vedic_multiplier_2bit(
+    input [1:0] a,
+    input [1:0] b,
+    output [3:0] out
+    );
+    wire temp1, temp2, temp3, temp4;
+
+    assign out[0] = a[0] & b[0];
+    assign temp1 = a[1] & b[0];
+    assign temp2 = a[0] & b[1];
+    assign temp3 = a[1] & b[1];
+
+   // instantiation of half adder
+    half_adder h1(temp1, temp2, out[1], temp4);
+    half_adder h2(temp4, temp3, out[2], out[3]);
+
+endmodule
+
+ // 4bit vedic multiplier module
+module vedic_multiplier_4bit(
+    input [3:0] a,
+    input [3:0] b,
+    output [7:0] out
+    );
+    wire [3:0] q0, q1, q2, q3;
+  wire [4:0] sum1, sum2;
+
+  
+   // instantiation of 2 bit vedic multiplier
+  
+    vedic_multiplier_2bit v1(a[1:0], b[1:0], q0);
+    vedic_multiplier_2bit v2(a[3:2], b[1:0], q1);
+    vedic_multiplier_2bit v3(a[1:0], b[3:2], q2);
+    vedic_multiplier_2bit v4(a[3:2], b[3:2], q3);
+
+    assign out[1:0] = q0[1:0];
+  assign sum1 = q1 + {2'd0, q0[3:2]};
+    assign sum2 = sum1 + q2;
+  assign out[7:2] = sum2 + {q3, 2'd0};
+
+endmodule
+
+// 8bit vedic multiplier module
+module vedic_multiplier_8bit(
+    input [7:0] a,
+    input [7:0] b,
+    output [15:0] out
+    );
+    wire [7:0] s0, s1, s2, s3;
+    wire [8:0] sum1, sum2;
+
+  
+    // instantiation of 4 bit vedic multiplier
+  
+    vedic_multiplier_4bit m1(a[3:0], b[3:0], s0);
+    vedic_multiplier_4bit m2(a[7:4], b[3:0], s1);
+    vedic_multiplier_4bit m3(a[3:0], b[7:4], s2);
+    vedic_multiplier_4bit m4(a[7:4], b[7:4], s3);
+
+    assign out[3:0] = s0[3:0];
+  assign sum1 = s1 + {4'd0, s0[7:4]};
+    assign sum2 = sum1 + s2;
+  assign out[15:4] = sum2 + {s3, 4'd0};
+
+endmodule
+
+// 16bit vedic multiplier module
+module vedic_multiplier_16bit(
+  input[15:0] a,
+  input[15:0] b,
+  output[31:0] out);
+  
+  wire [15:0] t0, t1, t2, t3;
+  wire [16:0] sum1, sum2;
+  
+  // instantiation of 8 bit vedic multiplier
+  
+  vedic_multiplier_8bit b1(a[7:0], b[7:0], t0);
+  vedic_multiplier_8bit b2(a[15:8], b[7:0], t1);
+  vedic_multiplier_8bit b3(a[7:0], b[15:8], t2);
+  vedic_multiplier_8bit b4(a[15:8], b[15:8], t3);
+  
+    assign out[7:0] = t0[7:0];
+    assign sum1 = t1 + {8'd0, t0[15:8]};
+    assign sum2 = sum1 + t2;
+    assign out[31:8] = sum2 + {t3, 8'd0};
+endmodule
