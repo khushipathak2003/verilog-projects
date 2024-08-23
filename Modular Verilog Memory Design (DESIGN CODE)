@@ -1,0 +1,42 @@
+`timescale 1ns / 1ps            // DESIGN CODE
+module ram_rom(
+input[3:0] data_in,
+input clk,
+input mode,
+input we,
+input reset,
+input[3:0] addr,
+output reg[3 :0] out
+ );
+ reg[3:0] mem[15 :0];
+
+// ROM memory allocation
+initial
+begin
+mem[0] = 4'b0001;
+mem[1] = 4'b0010;
+mem[2] = 4'b0100;
+mem[3] = 4'b1000;
+end
+
+always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            out <= 0;
+        end else begin
+            if (mode == 1'b1) begin
+                // RAM mode: Read and Write
+                if (we) begin
+                    mem[addr] <= data_in;
+                end
+                    out <= mem[addr];
+            end else begin
+                // ROM mode: Read only
+                     out <= mem[addr];
+            end
+        end
+    end
+endmodule
+
+
+
+
