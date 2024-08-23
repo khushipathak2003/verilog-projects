@@ -1,0 +1,36 @@
+`timescale 1ns / 1ps                        // TEST BENCH
+module vedic_multiplier_16bit_test;
+  reg[15:0] a; // 16 bit input
+  reg[15:0] b; // 16 bit input
+  wire[31:0] out; // 32 bit output
+
+	// Instantiate the Unit Under Test (UUT)
+	vedic_multiplier_16bit uut (
+      .a(a),
+      .b(b),
+      .out(out)
+	);
+initial begin
+    // Initialize inputs
+    a = 16'd1024; b = 16'd2345;
+    #10; // Wait 10 ns
+    
+     a = 16'd6789; b = 16'd3425;
+    #10; // Wait 10 ns
+    
+   a = 16'd1112; b = 16'd1111;
+    #10; // Wait 10 ns
+    
+   a = 16'd1342; b = 16'd2345;
+    #10; // Wait 10 ns
+    
+    
+
+    // Finish simulation
+    $finish;
+end
+
+initial begin
+  $monitor("Time = %0t : a = %d, b = %d, out = %d", $time, a, b, out); 
+end     
+endmodule
