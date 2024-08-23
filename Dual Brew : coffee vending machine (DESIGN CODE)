@@ -1,0 +1,136 @@
+`timescale 1ns / 1ps                         // DESIGN CODE
+module coffee_vending_machine(
+input clk,
+input rst,
+input[4:0] in,
+input select,
+output reg coffee0,
+output reg coffee1,
+output reg[3:0] money
+    );
+ reg[1:0] state, next_state;
+ parameter s0 = 2'b00;
+ parameter s1 = 2'b01;
+ parameter s2 = 2'b10;
+ always@(posedge clk)
+ begin
+ if(rst)
+ begin
+ state = 0;
+ next_state = 0;
+ end
+ else
+ begin
+ state = next_state;
+  case(state)
+  s0: if(in == 5'b00000)
+       begin
+		 next_state = s0;
+		 coffee0 = 0;
+		 coffee1 = 0;
+		 end
+		else if( in == 5'b00101)
+		begin
+		next_state = s1;
+		 coffee0 = 0;
+		 coffee1 = 0;
+		end
+		else if( in == 5'b01010)
+		begin
+		next_state = s2;
+		  coffee0 = 0;
+		 coffee1 = 0;
+		  end
+		else if( in == 5'b10100)
+		begin
+		next_state = s0;
+		money = 4'b0101;
+		if(select)
+		begin
+		coffee0 = 0;
+		 coffee1 = 1;
+		 end
+		 else begin
+		 coffee0 = 1;
+		 coffee1 = 0;
+		 end
+		end
+		
+  s1: if(in == 5'b00000)
+       begin
+		 next_state = s0;
+		  coffee0 = 0;
+		 coffee1 = 0;
+		 end
+		  else if( in == 5'b00101)
+		begin
+		next_state = s2;
+		 coffee0 = 0;
+		 coffee1 = 0;
+		end
+		else if( in == 5'b01010)
+		begin
+		next_state = s0;
+		 if(select)
+		begin
+		coffee0 = 0;
+		 coffee1 = 1;
+		 end
+		 else begin
+		 coffee0 = 1;
+		 coffee1 = 0;
+		 end
+		end
+		
+	
+	s2: if(in == 5'b00000)
+       begin
+		 next_state = s0;
+		  coffee0 = 0;
+		 coffee1 = 0;
+		 end
+	   else if( in == 5'b00101)
+		begin
+		next_state = s0;
+		 if(select)
+		begin
+		coffee0 = 0;
+		 coffee1 = 1;
+		 end
+		 else begin
+		 coffee0 = 1;
+		 coffee1 = 0;
+		 end
+		end
+		else if( in == 5'b01010)
+		begin
+		next_state = s0;
+		 money = 4'b0101;
+		 if(select)
+		begin
+		coffee0 = 0;
+		 coffee1 = 1;
+		 end
+		 else begin
+		 coffee0 = 1;
+		 coffee1 = 0;
+		 end
+		end
+		endcase
+ end
+end
+
+endmodule
+
+
+
+
+
+	
+
+
+
+
+
+
+
